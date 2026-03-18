@@ -89,6 +89,7 @@ func TestResolver_ResolvePackage(t *testing.T) {
 			},
 			expectedErr: "invalid version constraint: improper constraint: latest",
 		},
+		// fetch meta failure for dependency package is removed why?
 		{
 			name: "successful resolved package",
 			setup: func(tb testing.TB) npm.PackageFetcher {

@@ -35,6 +35,7 @@ func NewResolver(client PackageFetcher) Resolver {
 // PackageResolver resolves the metadata and dependencies of a given [Package],
 // based on its name and a version constraint.
 func (r Resolver) ResolvePackage(ctx context.Context, constraint *semver.Constraints, npmPkg *NpmPackageVersion) error {
+	// check the pointers npmPkg and constraint is not nil
 	meta, err := r.client.FetchPackageMeta(ctx, npmPkg.Name)
 	if err != nil {
 		return fmt.Errorf("fetch package meta %s: %w", npmPkg.Name, err)
@@ -62,12 +63,17 @@ func (r Resolver) ResolvePackage(ctx context.Context, constraint *semver.Constra
 			Dependencies: map[string]*NpmPackageVersion{},
 		}
 
+		// a visited patters to avoid infinite recursion
+		// TODO: add a maximum depth to the recursion, and possibly max dependencies
+		// ResolvePackage might return error , but it is ignored, need to handle it properly
 		r.ResolvePackage(ctx, depConstraint, npmPkg.Dependencies[depName]) //nolint:errcheck // best effort
 	}
 
 	return nil
 }
 
+
+// never used anywhere in the code, better call this in ResolvePackage and update tests accordingly
 func (r Resolver) resolvePackageHighestVersion(ctx context.Context, name string, constraint *semver.Constraints) (string, error) {
 	meta, err := r.client.FetchPackageMeta(ctx, name)
 	if err != nil {

@@ -84,6 +84,7 @@ func TestPackageVersion(t *testing.T) {
 				req.SetPathValue("packageVersion", "1.0.1")
 
 				resolver := mockshandler.NewMockPackageResolver(gomock.NewController(t))
+				// better with specific types for the arguments rather than any except context
 				resolver.EXPECT().ResolvePackage(gomock.Any(), gomock.Any(), gomock.Any()).
 					DoAndReturn(func(_ context.Context, _ *semver.Constraints, npmPkg *npm.NpmPackageVersion) error {
 						npmPkg.Version = "1.0.1"

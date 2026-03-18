@@ -52,6 +52,7 @@ func TestPackageNameVersionEndpoint(t *testing.T) {
 	ctx := context.Background()
 	url := fmt.Sprintf("http://%s/package/react/16.13.0", appAddr)
 
+	// better to make a helper test method that reads a file and requests and returns response body or error
 	expectedBody, err := os.ReadFile("testdata/expect_react_16.13.0.json")
 	require.NoError(t, err)
 

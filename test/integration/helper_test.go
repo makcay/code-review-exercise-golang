@@ -49,6 +49,7 @@ func (a *application) start() error {
 
 	//nolint:gosec // #nosec G402
 	a.cmd = exec.Command("go", "run", "../../cmd/npmjs-deps-fetcher/...",
+		// better use a.registryURL rather than hardcoded value
 		"--npm.registryUrl", "https://registry.npmjs.org",
 		"--server.addr", appAddr)
 	a.cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
